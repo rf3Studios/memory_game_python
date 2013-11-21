@@ -39,18 +39,17 @@ white_color = pygame.Color(255, 255, 255)
 orange_color = pygame.Color(245, 123, 0)
 green_color = pygame.Color(21, 115, 16)
 
-frame_width = 802
-frame_height = 152
-card_width = 50
+FRAME_WIDTH = 802
+FRAME_HEIGHT = 152
+CARD_WIDTH = 50
+GAME_TITLE = "The Memory Game"
 
 card_exposed = []
 cards_position = []
 
 
 def new_game():
-    """
-    Initializes or resets all values to their default state
-    """
+    """Initializes or resets all values to their default state"""
     global player_turns, player_tick, card_values, card_matches, cards_played
 
     # Set Player Up
@@ -72,23 +71,23 @@ def new_game():
 
     for x_pos in range(16):
         # Create card positions
-        cards_position.append([[x_pos * card_width, 50], [x_pos * card_width + 50, 50], [x_pos * card_width + 50, 150],
-                               [x_pos * card_width, 150]])
+        cards_position.append([[x_pos*CARD_WIDTH, 50],
+                               [x_pos*CARD_WIDTH + 50, 50],
+                               [x_pos*CARD_WIDTH + 50, 150],
+                               [x_pos*CARD_WIDTH, 150]])
         # While we are at it, inject all the card exposed values
         card_exposed.append(False)
 
 
 def frame():
-    """
-    Creates a new game surface for the game to run in
-    """
+    """Creates a new game surface for the game to run in"""
     new_game()
 
     # Create the surface
-    _game_surface = pygame.display.set_mode((frame_width, frame_height))
+    _game_surface = pygame.display.set_mode((FRAME_WIDTH, FRAME_HEIGHT))
 
     # Set the title
-    pygame.display.set_caption("The Memory Game")
+    pygame.display.set_caption(GAME_TITLE)
 
     # Create our game loop
     while True:
@@ -109,6 +108,7 @@ def frame():
 
 # Event Handlers
 def draw_handler(surface):
+    """Draws to the surface every iteration"""
     # Clear surface
     surface.fill((0, 0, 0))
 
@@ -119,7 +119,7 @@ def draw_handler(surface):
             pygame.draw.polygon(surface, orange_color, (cards_position[i]), 2)
         else:
             pygame.draw.polygon(surface, orange_color, (cards_position[i]), 2)
-            draw_text_helper(surface, card_values[i], (i * card_width + 15, 80), 64, white_color)
+            draw_text_helper(surface, card_values[i], (i * CARD_WIDTH + 15, 80), 64, white_color)
 
     # Draw player turns
     draw_text_helper(surface, "Turns: " + str(player_turns), (5, 8), 52, white_color)
@@ -131,9 +131,7 @@ def draw_handler(surface):
 
 
 def mouseclick_handler(pos):
-    """
-    Invoked when the user performs a mouse click.
-    """
+    """Invoked when the user performs a mouse click."""
     global player_turns, player_tick
 
     # This will be where the card is in the list of cards
@@ -175,15 +173,16 @@ def mouseclick_handler(pos):
 
 
 def keydown_handler(event_key):
-    """
-    Invoked when the user presses a keyboard key
-    """
+    """Invoked when the user presses a keyboard key"""
+    # If the 'N' key is pressed
     if event_key == 110:
+        # Start a new game
         new_game()
 
 
 # Helper
 def draw_text_helper(surface, value, pos, size, color, font="sans-serif"):
+    """Helper that creates the blit for PyGame to render text on the surface"""
     _font_object = pygame.font.Font(pygame.font.match_font(font), size)
     _font_draw = _font_object.render(str(value), True, color)
     surface.blit(_font_draw, pos)
